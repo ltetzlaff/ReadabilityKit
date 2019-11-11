@@ -1,0 +1,27 @@
+// swift-tools-version:5.1
+
+import PackageDescription
+
+let package = Package(
+    name: "ReadabilityKit",
+    products: [
+        .library(
+            name: "ReadabilityKit",
+            targets: ["ReadabilityKit"]),
+    ],
+    dependencies: [
+        .package(url: "https://github.com/honghaoz/Ji.git", from: "5.0.0")
+    ],
+    targets: [
+        .target(
+            name: "ReadabilityKit",
+            dependencies: [
+              "Ji"
+            ]),
+        .testTarget(
+            name: "ReadabilityKitTests",
+            dependencies: [
+              "ReadabilityKit"
+            ]),
+    ]
+)
