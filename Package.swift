@@ -17,11 +17,15 @@ let package = Package(
             name: "ReadabilityKit",
             dependencies: [
               "Ji"
-            ]),
+            ],
+            path: "Sources"
+        ),
         .testTarget(
             name: "ReadabilityKitTests",
             dependencies: [
               "ReadabilityKit"
-            ]),
+            ],
+            path: "ReadabilityKitTests"
+        ),
     ]
 )
