@@ -692,7 +692,7 @@ open class Readability {
 	}
 
 
-
+    @available(macOS 10.15, *)
     private func datePublished() -> String? {
 
         if let document = document {
@@ -703,14 +703,12 @@ open class Readability {
                 if documentString.range(of:checkString) != .none {
 
                     let scanner = Scanner(string:documentString)
-                    scanner .scanUpTo(checkString, into: .none)
+                    _ = scanner .scanString(checkString)
+                    _ = scanner .scanString(checkString)
 
-                    var scanned: NSString?
-                    scanner .scanString(checkString, into: .none)
+                    if let scanned = scanner .scanString("</script>") {
 
-                    if scanner .scanUpTo("</script>", into: &scanned) {
-
-                        guard  let dict = convertToDictionary(text: scanned! as String) else {
+                        guard  let dict = convertToDictionary(text: scanned) else {
 
                             return .none
                         }
@@ -758,7 +756,7 @@ open class Readability {
     }
     private func checkFormat(format:String ) -> String? {
 
-            guard let dateString = self.datePublished() else {
+            guard #available(macOS 10.15, *), let dateString = self.datePublished() else {
                 return .none;
             }
 
