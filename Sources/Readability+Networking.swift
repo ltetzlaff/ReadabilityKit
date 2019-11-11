@@ -25,9 +25,9 @@
 
 import Foundation
 
-#if os(OSX)
+#if os(macOS)
 	import AppKit
-#else
+#elseif os(iOS) || os(watchOS) || os(tvOS)
 	import UIKit
 #endif
 
@@ -89,17 +89,18 @@ public extension Readability {
 	}
 
 	class func checkForImage(_ data: Data) -> Bool {
-		#if os(OSX)
-			let image = NSImage(data: data)
-		#else
-			let image = UIImage(data: data)
+		#if os(macOS)
+      guard NSImage(data: data) != nil else {
+        return false
+      }
+      return true
+		#elseif os(iOS) || os(watchOS) || os(tvOS)
+      guard UIImage(data: data) != nil else {
+        return false
+      }
+      return true
+    #else
+      return false
 		#endif
-
-		if let _ = image {
-			return true
-		}
-
-		return false
 	}
-
 }
