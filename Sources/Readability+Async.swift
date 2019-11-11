@@ -23,10 +23,12 @@
 //  THE SOFTWARE.
 //
 
+import Foundation
+
 public extension Readability {
     class func parse(data htmlData: Data, completion: @escaping (ReadabilityData?) -> ()) {
 		let isMainThread = Thread.isMainThread
-        
+
         DispatchQueue.global(qos: .default).async {
 			let parsedData = Readability.parse(htmlData)
 			if isMainThread {

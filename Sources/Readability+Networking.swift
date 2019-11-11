@@ -23,6 +23,8 @@
 //  THE SOFTWARE.
 //
 
+import Foundation
+
 #if os(OSX)
 	import AppKit
 #else
@@ -39,7 +41,7 @@ public extension Readability {
 
 		var request = URLRequest(url: url)
 		request.setValue(readabilityUserAgent, forHTTPHeaderField: "User-Agent")
-        
+
 
 		URLSession.shared.dataTask(with: request,
 			completionHandler: { (responseData, _, _) in

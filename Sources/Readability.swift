@@ -23,6 +23,7 @@
 //  THE SOFTWARE.
 //
 
+import Foundation
 import Ji
 
 public struct ReadabilityData {
@@ -64,7 +65,7 @@ open class Readability {
 	let videoQueries: [(String, String?)] = [
 		("//head/meta[@property='og:video:url']", "content")
 	]
-    
+
     let dateQueries: [(String, String?)] = [
         ("//meta[@itemprop='datePublished']", "content"),
         ("//span[@itemprop='datePublished']", "content"),
@@ -92,9 +93,9 @@ open class Readability {
         ("//head/meta[@property='time']", "content"),
         ("//time[@class='published-date hidden']", "datetime"),
         ("//head/meta[@name='published_date']", "content"),
-        
+
     ]
-    
+
 	let keywordsQueries: [(String, String?)] = [
 		("//head/meta[@name='keywords']", "content"),
 	]
@@ -255,11 +256,11 @@ open class Readability {
 		let index = str.distance(from: str.startIndex, to: firstElement)
 		if index >= 0 {
 			c += 1
-            
+
             let sourceStr = String(str[str.index(firstElement, offsetBy: substring.count)...])
             c += calculateNumberOfAppearance(sourceStr,
                                              substring: substring)
-            
+
             //c += calculateNumberOfAppearance(str.substring(from: str.index(firstElement, offsetBy: substring.count)), substring: substring)
 
 		}
@@ -689,46 +690,46 @@ open class Readability {
 
 		return .none
 	}
-    
-    
-    
+
+
+
     private func datePublished() -> String? {
-        
+
         if let document = document {
-            
+
             if  let documentString = String(data: (document.data!), encoding: String.Encoding.utf8) {
-                
+
                 let checkString = "type=\"application/ld+json\">"
                 if documentString.range(of:checkString) != .none {
-                    
+
                     let scanner = Scanner(string:documentString)
                     scanner .scanUpTo(checkString, into: .none)
-                    
+
                     var scanned: NSString?
                     scanner .scanString(checkString, into: .none)
-                    
+
                     if scanner .scanUpTo("</script>", into: &scanned) {
-                        
+
                         guard  let dict = convertToDictionary(text: scanned! as String) else {
-                            
+
                             return .none
                         }
-                        
+
                         if let publishDate = dict["datePublished"] {
                             return publishDate as? String
                         } else if  let publishDate = dict["dateCreated"] {
                             return publishDate as? String;
                         }
-                        
+
                     }
 
                 }
-                
+
             }
             if let dateData = extractValueUsing(document, queries: dateQueries){
                 return dateData
             }
-            
+
         }
         return .none
     }
@@ -752,7 +753,7 @@ open class Readability {
             mutable.removeSubrange(removeRange)//removeRange(removeRange)
             range = mutable.rangeOfCharacter(from: controlChars)//rangeOfCharacterFromSet(controlChars)
         }
-        
+
         return mutable
     }
     private func checkFormat(format:String ) -> String? {
@@ -760,16 +761,16 @@ open class Readability {
             guard let dateString = self.datePublished() else {
                 return .none;
             }
-            
+
             let dateFormatter = DateFormatter()
             dateFormatter.locale = NSLocale(localeIdentifier: "en_US_POSIX") as Locale
             dateFormatter.dateFormat = format
-           
+
         guard let finalDate = dateFormatter.date(from: dateString) else { return .none }
-        
+
             dateFormatter.dateFormat = "dd MMM yyyy"
             return (dateFormatter.string(from: finalDate))
-            
+
         }
     private func convertDateToFormat() -> String? {
         let formatArray = [
@@ -795,7 +796,7 @@ open class Readability {
             "EEE, dd MMM yyyy hh:mm:ss Z",
             "YYYYMMdd'T'HH:mm:ss'Z'",
         ]
-        
+
         for format in formatArray {
             if  let checkIfAvailable = checkFormat(format: format){
                 return checkIfAvailable
