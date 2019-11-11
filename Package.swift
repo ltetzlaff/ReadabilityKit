@@ -10,7 +10,7 @@ let package = Package(
             targets: ["ReadabilityKit"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/honghaoz/Ji.git", from: "5.0.0")
+        .package(url: "https://github.com/honghaoz/Ji.git", .branch("master"))
     ],
     targets: [
         .target(
